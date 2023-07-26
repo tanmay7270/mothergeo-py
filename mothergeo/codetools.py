@@ -57,9 +57,7 @@ class Enums(object):
         # If we haven't already done so...
         if symbols2members is None:
             # ...now's the time to create the index of symbols to the member names.
-            symbols2members = CaseInsensitiveDict({
-                _name: _member for _name, _member in enum_cls.__members__.items()
-            })
+            symbols2members = CaseInsensitiveDict(dict(enum_cls.__members__.items()))
             # Now save the collection we just created for next time.
             Enums._names2members[enum_cls] = symbols2members
         # Return the enumeration member indexed to the symbol that was passed in.
@@ -83,14 +81,11 @@ class Dicts(object):
         :return: a named tuple that indicates whether or not the key was defined, and the value
         :rtype:  :py:class:`TryGetResult`
         """
-        if obj is None:  # Sanity check.
+        if obj is None or key not in obj:  # Sanity check.
             return TryGetResult(False, default)
-        elif key in obj:  # If the key is defined...
+        else:  # If the key is defined...
             # ...just return the value.
             return TryGetResult(True, obj[key])
-        else:  # We didn't find the key, eh?...
-            # ...return the default value to the caller.
-            return TryGetResult(False, default)
 
 
 class Iters(object):

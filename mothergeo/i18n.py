@@ -82,7 +82,7 @@ class I18nPack(UserDict):
         if locale is None or locale == 'default':
             # ...we're changing the values in the dictionary.
             self.clear()
-            for key in translations.keys():
+            for key in translations:
                 self[key] = translations[key]
         else:  # Otherwise, insert (or swap) the previous dictionary.
             self.__translations[locale] = I18nPack(translations)

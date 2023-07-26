@@ -543,7 +543,7 @@ class FeatureTableInfo(RelationInfo):
         """
         super().__init__(name=name, identity=identity, fields=fields, nena=nena, i18n=i18n)
         self._geometry_type = geometry_type
-        self._srid = int(srid) if srid is not None else None
+        self._srid = srid if srid is not None else None
 
     @property
     def geometry_type(self) -> GeometryType:

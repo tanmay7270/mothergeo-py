@@ -121,8 +121,8 @@ class ConfigurationManager(object):
         :return: a key based upon the argument values, suitable for use in a dictionary
         :rtype:  ``tuple(str or None, str or None)``
         """
-        # Create a tuple key based on the section and option.
-        key = (str.lower(section) if section is not None else None,
-               str.lower(option) if option is not None else None)
-        return key
+        return (
+            str.lower(section) if section is not None else None,
+            str.lower(option) if option is not None else None,
+        )
 

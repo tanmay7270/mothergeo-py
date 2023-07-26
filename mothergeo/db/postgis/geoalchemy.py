@@ -255,17 +255,16 @@ class GeoAlchemyEntityClassFactory(EntityClassFactory):
             props)  # Provide the properties.
         # Create the GeoAlchemy table in the database.
         inner_cls.__table__.create(self.data_store.engine)
-        # Now let's create the wrapper class.
-        new_cls = type(
-            "GeoAlchemyDynamic_{relation_name}".format(relation_name=relation_info.name),
+        return type(
+            "GeoAlchemyDynamic_{relation_name}".format(
+                relation_name=relation_info.name
+            ),
             (self.base_type,),  # Inherit from the type specified by the factory.
             {
                 '_geoalchemy_class': inner_cls,
-                '_data_store': self._data_store  # Each instance will have a reference to the data_store.
-            }
+                '_data_store': self._data_store,  # Each instance will have a reference to the data_store.
+            },
         )
-        # That's it!
-        return new_cls
 
     @property
     def base_type(self):

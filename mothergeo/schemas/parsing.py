@@ -126,9 +126,7 @@ class JsonModelInfoParser(ModelInfoParser):
         revision = JsonModelInfoParser._json_2_revision(parsed['revision'])  # ...the version (revision),
         # ...and the feature tables (which come from the 'spatial' property).
         spatial_info = JsonModelInfoParser._json_2_spatial_info(parsed['spatial'])
-        # We should now have enough information to create our model info object.
-        model = ModelInfo(name=name, revision=revision, spatial_info=spatial_info)
-        return model
+        return ModelInfo(name=name, revision=revision, spatial_info=spatial_info)
 
     # def format(self, model):
     #     return None
@@ -199,7 +197,7 @@ class JsonModelInfoParser(ModelInfoParser):
         # The full list of fields for the feature table includes all the fields specifically defined, plus the
         # common fields that have been defined.
         fields = [JsonModelInfoParser._json_2_field_info(fi_json) for fi_json in jsobj['fields']] + common_fields
-        identity = default_identity if 'identity' in jsobj else default_identity
+        identity = default_identity
         srid = jsobj['srid'] if 'srid' in jsobj else default_srid
         return FeatureTableInfo(
             name=name,
@@ -231,29 +229,25 @@ class JsonModelInfoParser(ModelInfoParser):
     def _json_2_source(jsobj: object) -> Source:
         requirement = Dicts.try_get(jsobj, 'requirement', None).value
         analogs = Dicts.try_get(jsobj, 'analogs', []).value
-        source = Source(requirement=requirement, analogs=analogs)
-        return source
+        return Source(requirement=requirement, analogs=analogs)
 
     @staticmethod
     def _json_2_target(jsobj: object) -> Target:
         calculated = Dicts.try_get(jsobj, 'calculated', False).value
         guaranteed = Dicts.try_get(jsobj, 'guaranteed', False).value
-        target = Target(calculated=calculated, guaranteed=guaranteed)
-        return target
+        return Target(calculated=calculated, guaranteed=guaranteed)
 
     @staticmethod
     def _json_2_usage(jsobj: object) -> Usage:
         search = Dicts.try_get(jsobj, 'search', False).value
         display = Dicts.try_get(jsobj, 'display', False).value
-        usage = Usage(search=search, display=display)
-        return usage
+        return Usage(search=search, display=display)
 
     @staticmethod
     def _json_2_nena_spec(jsobj: object) -> NenaSpec:
         analog = Dicts.try_get(jsobj, 'analog', None).value
         required = Dicts.try_get(jsobj, 'required', False).value
-        nena_spec = NenaSpec(analog=analog, required=required)
-        return nena_spec
+        return NenaSpec(analog=analog, required=required)
 
     @staticmethod
     def _json_2_i18n(jsobj: object) -> I18nPack:
@@ -262,7 +256,7 @@ class JsonModelInfoParser(ModelInfoParser):
         # Construct the pack.
         pack = I18nPack(defaults)
         # Get the other (non-default) translation sets.
-        for locale in [key for key in filter(lambda key: key != 'default', jsobj.keys())]:
+        for locale in list(filter(lambda key: key != 'default', jsobj.keys())):
             pack.set_translations(translations=jsobj[locale], locale=locale)
         # That should be all.
         return pack

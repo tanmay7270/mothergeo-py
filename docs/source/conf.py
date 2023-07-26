@@ -37,9 +37,7 @@ sys.path.insert(0, _pysrc)
 
 
 def skip(app, what, name, obj, skip, options):
-    if name == "__init__":
-        return False
-    return skip
+    return False if name == "__init__" else skip
 
 
 def setup(app):
